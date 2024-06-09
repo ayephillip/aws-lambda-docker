@@ -9,21 +9,8 @@ export class DockerLambdaAwsStack extends cdk.Stack {
     const dockerFunc = new lambda.DockerImageFunction(this, "DockerFunc", {
       code: lambda.DockerImageCode.fromImageAsset("./image"),
       memorySize: 1024,
-      timeout: cdk.Duration.seconds(10),
-      architecture: lambda.Architecture.ARM_64,
-    });
-
-    const functionUrl = dockerFunc.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-      cors: {
-        allowedMethods: [lambda.HttpMethod.ALL],
-        allowedHeaders: ["*"],
-        allowedOrigins: ["*"],
-      },
-    });
-
-    new cdk.CfnOutput(this, "FunctionUrlValue", {
-      value: functionUrl.url,
+      timeout: cdk.Duration.seconds(30),
+      architecture: lambda.Architecture.ARM_64, // apple silicon
     });
   }
 }
