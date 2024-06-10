@@ -11,10 +11,11 @@ WORKDIR /usr/src/app
 COPY src/* .
 
 # Install required Julia packages
-RUN julia -e 'using Pkg; Pkg.add("JSON")'
+RUN julia -e 'using Pkg; Pkg.add("JSON"); Pkg.add("HTML")'
 
 # Set the entry point to the Julia REPL
 ENTRYPOINT ["julia"]
 
 # Set the command to run your Julia script
-CMD ["-e", "include(\"main.jl\")"]
+CMD ["-e", "include(\"main.jl\"); \
+            HTTP.serve(handler, \"0.0.0.0\", 8080)"]
