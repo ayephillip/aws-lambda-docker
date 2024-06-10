@@ -1,23 +1,20 @@
 # Use the official Julia image as the base image
-FROM public.ecr.aws/docker/library/julia:latest
+FROM julia:1.7.0
 
 # Set the JULIA_DEPOT_PATH environment variable to a directory with write permissions
-ENV JULIA_DEPOT_PATH=${LAMBDA_TASK_ROOT}/depot
+ENV JULIA_DEPOT_PATH="/usr/local/julia"
 
-# Create the directory for JULIA_DEPOT_PATH
-RUN mkdir -p $JULIA_DEPOT_PATH
+# Set the working directory
+WORKDIR /usr/src/app
 
-# Copy install.jl
-COPY install.jl ${LAMBDA_TASK_ROOT}
+# Copy your Julia code into the container (assuming it's in the same directory as your Dockerfile)
+COPY src/* .
 
-# Add Julia packages using install.jl
-RUN julia install.jl
+# Install required Julia packages
+RUN julia -e 'using Pkg; Pkg.add("JSON")'
 
-# Copy all Julia source files into the container
-COPY src/* ${LAMBDA_TASK_ROOT}
+# Set the entry point to the Julia REPL
+ENTRYPOINT ["julia"]
 
-# # Install required Julia packages
-# RUN julia -e 'using Pkg; Pkg.add("JSON3")'
-
-# Set the command to run your Julia handler
-CMD ["julia", "-e", "include(\"main.jl\")"]
+# Set the command to run your Julia script
+CMD ["-e", "include(\"main.jl\")"]
