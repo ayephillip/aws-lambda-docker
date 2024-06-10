@@ -9,8 +9,8 @@ export class DockerLambdaAwsStack extends cdk.Stack {
     const dockerFunc = new lambda.DockerImageFunction(this, "DockerFunc", {
       code: lambda.DockerImageCode.fromImageAsset("./image"),
       memorySize: 1024,
-      timeout: cdk.Duration.seconds(255),
-      architecture: lambda.Architecture.X86_64
+      timeout: cdk.Duration.seconds(65),
+      architecture: lambda.Architecture.ARM_64
     });
   }
 }

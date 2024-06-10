@@ -1,7 +1,8 @@
+using Random
 using JSON
+using HTTP
 
-function handler()
-
+function handler(req)
     arr = rand(0:9, 3, 3)
     response = Dict(
         "statusCode" => 200,
@@ -10,7 +11,7 @@ function handler()
             "array" => arr
         )
     )
-    return JSON.json(response)
+    return HTTP.Response(200, JSON.json(response))
 end
 
-handler()
+HTTP.serve(handler, "0.0.0.0", 8080)
