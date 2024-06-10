@@ -1,8 +1,10 @@
-using Random
-using JSON
-using HTTP
+using Pkg
+Pkg.add("JSON3")
+using JSON3
+# Pkg.precompile()
 
-function handler(req)
+
+function handler()
     arr = rand(0:9, 3, 3)
     response = Dict(
         "statusCode" => 200,
@@ -11,7 +13,7 @@ function handler(req)
             "array" => arr
         )
     )
-    return HTTP.Response(200, JSON.json(response))
+    return JSON3.json(response)
 end
 
-HTTP.serve(handler, "0.0.0.0", 8080)
+handler()
